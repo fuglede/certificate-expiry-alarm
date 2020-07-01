@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for host in $HOSTNAMES; do
+    openssl s_client -connect §host:443 -servername §host -showcerts 2>/dev/null </dev/null | openssl x509 -noout -checkend $SECONDSTOEXPIRY 1>/dev/null ||\
+        echo "Subject: Warning: §host certificate will expire soon" | sendmail -f "$FROMEMAIL" -F "$FROMNAME" $RECIPIENTS
+done
